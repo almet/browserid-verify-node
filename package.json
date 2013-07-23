@@ -1,0 +1,34 @@
+{
+    "name" : "browserid-verifier",
+    "description" : "Verify BrowserID assertions.",
+    "version" : "0.1.0",
+    "license" : "MPL 2.0",
+
+    "main" : "browserid-verifier.js",
+
+    "dependencies" : {
+        "" : ""
+    },
+
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/chilts/browserid-verifier.git"
+    },
+    "bugs" : {
+        "url" : "http://github.com/chilts/browserid-verifier/issues",
+        "email" : "andychilton@gmail.com"
+    },
+
+    "devDependencies" : {
+        "nock" : "0.18.x",
+        "tape" : "1.0.x"
+    },
+
+    "scripts" : {
+        "test" : "set -e; for FILE in test/*.js; do node $FILE; done"
+    },
+
+    "keywords" : [
+        "persona", "browserid", "verifier"
+    ]
+}
