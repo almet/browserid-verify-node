@@ -6,12 +6,20 @@ browserid-verify - Verify BrowserID assertions.
 var verify = require('browserid-verify');
 
 // once you have an assertion from the browser
-verify(assertion, audience, function(err, email) {
+verify(assertion, audience, function(err, response) {
     if (err) {
+        // make sure no session is created
         return console.log('There was an error : ' + err);
     }
 
-    console.log('The asserted email address is ' + email);
+    // The err above means that something went wrong. Now, check response
+    // to see if the assertion was ok.
+    if ( response.status !== 'okay' ) {
+        // make sure no session is created
+        return console.log('Assertion was not ok : ' + response.reason);
+    }
+
+    console.log('The asserted email address is ' + response.email);
 
     // At this point, set up your cookie and session for the
     // newly logged in user.
