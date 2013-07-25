@@ -63,12 +63,11 @@ function verifyRemotely(assertion, audience, callback) {
                     return callback(new Error("Remote verifier did not return any data."));
                 }
 
-                if ( response.status !== 'okay' ) {
-                    return callback(new Error("Remote verifier status was not okay : " + response.status));
-                }
-
-                // pass the email back
-                callback(null, response.email);
+                // Here, we're passing back the entire reponse since it should be up to
+                // the client to check if response.status === 'okay'. Also because
+                // if we only return an email address, then they are missing out on other
+                // info that they might want to use (such as expires, issuer, etc).
+                return callback(null, response);
             })
         ;
     });
