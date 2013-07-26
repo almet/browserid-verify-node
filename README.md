@@ -43,4 +43,12 @@ path to make sure it is easy to switch from one to the other.
 
 Both remote and local verification functions will have the same API to allow this to happen.
 
+## License ##
+
+MPL 2.0
+
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 (Ends)
