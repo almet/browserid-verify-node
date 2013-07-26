@@ -5,7 +5,7 @@ var test = require('tape');
 var nock = require('nock');
 
 // local
-var verify = require('../browserid-verifier.js');
+var verify = require('../browserid-verify.js');
 
 // ----------------------------------------------------------------------------
 
