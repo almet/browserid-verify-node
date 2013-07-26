@@ -67,7 +67,7 @@ function verifyRemotely(assertion, audience, callback) {
                 // the client to check if response.status === 'okay'. Also because
                 // if we only return an email address, then they are missing out on other
                 // info that they might want to use (such as expires, issuer, etc).
-                return callback(null, response);
+                return callback(null, response.email, response);
             })
         ;
     });

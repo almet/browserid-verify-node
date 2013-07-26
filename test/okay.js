@@ -20,10 +20,16 @@ test('got an email address()', function(t) {
     ;
 
     // now verify a (fake) assertion
-    verify('assertion', 'audience', function(err, email) {
+    verify('assertion', 'https://example.com/', function(err, email, response) {
         t.equal(err, null, 'There is no error.');
 
         t.equal(email, 'me@example.com', 'Email address asserted correctly.');
+
+        t.equal(response.status, 'okay', 'Response status is okay.');
+        t.equal(response.email, 'me@example.com', 'Email in response is same as email passed back.');
+        t.equal(response.issuer, 'example.com', 'Issuer is also example.com.');
+        t.equal(response.expires, 1354217396705, 'Expires is correct.');
+        t.equal(response.audience, 'https://example.com', 'Audience is correct.');
 
         t.end();
     });
