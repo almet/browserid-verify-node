@@ -12,7 +12,7 @@ var verify = require('../browserid-verify.js');
 // create the mock server and client for Route53
 var verifier = nock('https://verifier.login.persona.org');
 
-test('got an email address()', function(t) {
+test('status is okay', function(t) {
     // mock the response
     verifier
         .post('/verify')
@@ -30,6 +30,33 @@ test('got an email address()', function(t) {
         t.equal(response.issuer, 'example.com', 'Issuer is also example.com.');
         t.equal(response.expires, 1354217396705, 'Expires is correct.');
         t.equal(response.audience, 'https://example.com', 'Audience is correct.');
+
+        t.equal(response.reason, undefined, 'No reason in the response at all.');
+
+        t.end();
+    });
+
+});
+
+test('status is failure - audience mismatch', function(t) {
+    // mock the response
+    verifier
+        .post('/verify')
+        .replyWithFile(200, __dirname + '/status-failure-audience-mismatch.json')
+    ;
+
+    // now verify a (fake) assertion
+    verify('assertion', 'https://chilts.org/', function(err, email, response) {
+        t.equal(err, null, 'There is no error.');
+
+        t.equal(email, undefined, 'No email address returned.');
+
+        t.equal(response.status, 'failure', 'Response status is failure, as expected.');
+        t.equal(response.reason, 'audience mismatch: domain mismatch', 'Audience mismatch');
+        t.equal(response.email, undefined, 'No email address in the response at all.');
+        t.equal(response.expires, undefined, 'No expires in the response at all.');
+        t.equal(response.audience, undefined, 'No audience in the response at all.');
+        t.equal(response.issuer, undefined, 'No issuer in the response at all.');
 
         t.end();
     });
