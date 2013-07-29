@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-// browserid-verifier.js - remote or local verification of a browserid assertion
+// browserid-verify.js - remote or local verification of a browserid assertion
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -19,80 +19,95 @@ const VERIFIER_PATH   = '/verify';
 
 // ----------------------------------------------------------------------------
 
-function verifyRemotely(assertion, audience, callback) {
-    if (typeof callback !== 'function') throw "missing required callback argument";
+function browserIdVerify(opts) {
+    // set some defaults
+    opts      = opts      || {};
+    opts.type = opts.type || 'remote';
+    opts.host = opts.host || VERIFIER_HOST;
+    opts.path = opts.path || VERIFIER_PATH;
 
-    if (typeof assertion !== 'string' ) {
-        process.nextTick(function() {
-            callback('assertion should be a string');
-        });
-        return;
+    // return the remote verifier
+    if ( opts.type === 'remote' ) {
+        return function verifyRemotely(assertion, audience, callback) {
+            if (typeof callback !== 'function') throw "missing required callback argument";
+
+            if (typeof assertion !== 'string' ) {
+                process.nextTick(function() {
+                    callback('assertion should be a string');
+                });
+                return;
+            }
+
+            if (typeof audience !== 'string' ) {
+                process.nextTick(function() {
+                    callback('audience should be a string');
+                });
+                return;
+            }
+
+            // hit the remote verifier
+            var reqOpts = {
+                method: VERIFIER_METHOD,
+                host: opts.host,
+                path: opts.path
+            };
+
+            var req = https.request(reqOpts, function(resp) {
+                // collect up the returned body
+                var body = "";
+
+                resp
+                    .on('data', function(chunk) {
+                        body += chunk;
+                    })
+                    .on('end', function() {
+                        var response;
+
+                        // catch any errors when parsing the returned JSON
+                        try {
+                            response = JSON.parse(body);
+                        } catch(e) {
+                            return callback(new Error("Remote verifier did not return JSON."));
+                        }
+
+                        if ( !response ) {
+                            return callback(new Error("Remote verifier did not return any data."));
+                        }
+
+                        // Here, we're passing back the entire reponse since it should be up to
+                        // the client to check if response.status === 'okay'. Also because
+                        // if we only return an email address, then they are missing out on other
+                        // info that they might want to use (such as expires, issuer, etc).
+                        return callback(null, response.email, response);
+                    })
+                ;
+            });
+
+            req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            var data = querystring.stringify({
+                assertion : assertion,
+                audience  : audience,
+            });
+
+            req.setHeader('Content-Length', data.length);
+            req.write(data);
+            req.end();
+        };
     }
 
-    if (typeof audience !== 'string' ) {
-        process.nextTick(function() {
-            callback('audience should be a string');
-        });
-        return;
+    // return the local verifier
+    if ( opts.type === 'local' ) {
+        throw new Error("Program error: local verification is not yet implemented. Please use 'remote' verification.");
     }
 
-    // hit the remote verifier
-    var req = https.request({
-        method: VERIFIER_METHOD,
-        host: VERIFIER_HOST,
-        path: VERIFIER_PATH
-    }, function(resp) {
-        // collect up the returned body
-        var body = "";
-
-        resp
-            .on('data', function(chunk) {
-                body += chunk;
-            })
-            .on('end', function() {
-                var response;
-
-                // catch any errors when parsing the returned JSON
-                try {
-                    response = JSON.parse(body);
-                } catch(e) {
-                    return callback(new Error("Remote verifier did not return JSON."));
-                }
-
-                if ( !response ) {
-                    return callback(new Error("Remote verifier did not return any data."));
-                }
-
-                // Here, we're passing back the entire reponse since it should be up to
-                // the client to check if response.status === 'okay'. Also because
-                // if we only return an email address, then they are missing out on other
-                // info that they might want to use (such as expires, issuer, etc).
-                return callback(null, response.email, response);
-            })
-        ;
-    });
-
-    req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    var data = querystring.stringify({
-        assertion : assertion,
-        audience  : audience,
-    });
-
-    req.setHeader('Content-Length', data.length);
-    req.write(data);
-    req.end();
-}
-
-function verifyLocally(assertion, audience, callback) {
-    throw new Error("Program error: this function is not yet implemented. Please use verifyRemotely().");
+    // don't know what this type is
+    throw new Error('Unknown verifier type : ' + opts.type);
 }
 
 // ----------------------------------------------------------------------------
-// until the assertion format is unchanging, default to the remote verification
+// export the creator function
 
-module.exports          = verifyRemotely; // default
-module.exports.remotely = verifyRemotely;
-module.exports.locally  = verifyLocally;
+module.exports = browserIdVerify;
 
 // ----------------------------------------------------------------------------

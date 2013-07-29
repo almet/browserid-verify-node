@@ -5,7 +5,9 @@ var test = require('tape');
 var nock = require('nock');
 
 // local
-var verify = require('../browserid-verify.js');
+var verify = require('../browserid-verify.js')({
+    type : 'remote'
+});
 
 // ----------------------------------------------------------------------------
 

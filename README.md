@@ -3,10 +3,10 @@ browserid-verify - Verify BrowserID assertions.
 ## Synopsis ##
 
 ```
-var verify = require('browserid-verify');
+var verify = require('browserid-verify')();
 
 // once you have an assertion from the browser
-verify(assertion, audience, function(err, response) {
+verify(assertion, audience, function(err, email, response) {
     if (err) {
         // make sure no session is created
         return console.log('There was an error : ' + err);
@@ -14,17 +14,47 @@ verify(assertion, audience, function(err, response) {
 
     // The err above means that something went wrong. Now, check response
     // to see if the assertion was ok.
-    if ( response.status !== 'okay' ) {
+    if ( !email ) {
         // make sure no session is created
         return console.log('Assertion was not ok : ' + response.reason);
     }
 
-    console.log('The asserted email address is ' + response.email);
+    console.log('The asserted email address is : ' + email);
+    console.log('The entire reponse is :', response);
 
     // At this point, set up your cookie and session for the
     // newly logged in user.
 });
 ```
+
+## Verify Options ##
+
+### type ###
+
+```
+type: (local|remote) - default: remote
+```
+
+Currently this package uses the remote verifier hosted at 'https://verifier.login.persona.org/verify' when using remote
+verification. You can change this by changing the ```host``` and ```path``` options (see below).
+
+### host ###
+
+```
+host: (a string) - default: verifier.login.persona.org
+```
+
+This host can be overriden if you are using a different verifier than the default. For example, if you only allow
+outgoing requests from your webservers to another machine within your private network.
+
+### path ###
+
+```
+path: (a string) - default: /verify
+```
+
+This path can be overriden if you are using a different verifier than the default and the verifier is hosted at a
+different path.
 
 ## Remote v Local Verification ##
 

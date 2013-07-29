@@ -6,8 +6,10 @@
 
     "main" : "browserid-verify.js",
 
-    "dependencies" : {
-        "" : ""
+    "dependencies" : {},
+    "devDependencies" : {
+        "nock" : "0.18.x",
+        "tape" : "1.0.x"
     },
 
     "repository" : {
@@ -17,11 +19,6 @@
     "bugs" : {
         "url" : "http://github.com/chilts/browserid-verify/issues",
         "email" : "andychilton@gmail.com"
-    },
-
-    "devDependencies" : {
-        "nock" : "0.18.x",
-        "tape" : "1.0.x"
     },
 
     "scripts" : {
