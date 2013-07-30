@@ -8,14 +8,16 @@
 //
 // ----------------------------------------------------------------------------
 
+// core
 var https = require('https');
+var http  = require('http');
 var querystring = require('querystring');
+var url = require('url');
 
 // ----------------------------------------------------------------------------
 
 const VERIFIER_METHOD = 'POST';
-const VERIFIER_HOST   = 'verifier.login.persona.org';
-const VERIFIER_PATH   = '/verify';
+const VERIFIER_URL    = 'https://verifier.login.persona.org/verify';
 
 // ----------------------------------------------------------------------------
 
@@ -23,8 +25,22 @@ function browserIdVerify(opts) {
     // set some defaults
     opts      = opts      || {};
     opts.type = opts.type || 'remote';
-    opts.host = opts.host || VERIFIER_HOST;
-    opts.path = opts.path || VERIFIER_PATH;
+    opts.url  = opts.url  || VERIFIER_URL;
+
+    // firstly, parse the url
+    var parsedUrl = url.parse(opts.url);
+
+    // var httpPkg = opts.
+    var protocol;
+    if ( parsedUrl.protocol === 'https:' ) {
+        protocol = https;
+    }
+    else if ( parsedUrl.protocol === 'http:' ) {
+        protocol = http;
+    }
+    else {
+        throw new Error("url protocol must be 'https:' or 'http:', not '" + parsedUrl.protocol + "'");
+    }
 
     // return the remote verifier
     if ( opts.type === 'remote' ) {
@@ -47,12 +63,13 @@ function browserIdVerify(opts) {
 
             // hit the remote verifier
             var reqOpts = {
-                method: VERIFIER_METHOD,
-                host: opts.host,
-                path: opts.path
+                method   : VERIFIER_METHOD,
+                hostname : parsedUrl.hostname,
+                path     : parsedUrl.path,
+                port     : parsedUrl.port,
             };
 
-            var req = https.request(reqOpts, function(resp) {
+            var req = protocol.request(reqOpts, function(resp) {
                 // collect up the returned body
                 var body = "";
 
