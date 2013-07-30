@@ -36,25 +36,24 @@ type: (local|remote) - default: remote
 ```
 
 Currently this package uses the remote verifier hosted at 'https://verifier.login.persona.org/verify' when using remote
-verification. You can change this by changing the ```host``` and ```path``` options (see below).
+verification. You can change this by changing the ```url``` option (see below).
 
-### host ###
+### url ###
 
 ```
-host: (a string) - default: verifier.login.persona.org
+url: (a string) - default: https://verifier.login.persona.org/verify
 ```
 
-This host can be overriden if you are using a different verifier than the default. For example, if you only allow
+The remote URL to use to verify the assertion can be overriden with this option. For example, if you only allow
 outgoing requests from your webservers to another machine within your private network.
 
-### path ###
+All requests to the URL will use the POST method with a 'Content-Type' of 'application/x-www-form-urlencoded' and the
+'assertion' and 'audience' parameters as part of the form being encoded and sent.
 
-```
-path: (a string) - default: /verify
-```
+You may use a 'http' service but you must make sure that you trust this service e.g. it may be a service you have
+running within your provate network.
 
-This path can be overriden if you are using a different verifier than the default and the verifier is hosted at a
-different path.
+You may also provide a port (8080) and path (/). For example 'http://localhost:8080/'.
 
 ## Remote v Local Verification ##
 
