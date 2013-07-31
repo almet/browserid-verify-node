@@ -74,6 +74,11 @@ function browserIdVerify(opts) {
             }
 
             var req = protocol.request(reqOpts, function(resp) {
+                // if the statusCode isn't what we expect, get out of here
+                if ( resp.statusCode !== 200 ) {
+                    return callback(new Error("Remote verifier returned a non-200 status code : " + resp.statusCode));
+                }
+
                 // collect up the returned body
                 var body = "";
 
