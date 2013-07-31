@@ -8,6 +8,7 @@
 
     "dependencies" : {},
     "devDependencies" : {
+        "tunnel" : "0.0.x",
         "nock" : "0.18.x",
         "tape" : "1.0.x"
     },

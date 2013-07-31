@@ -55,6 +55,33 @@ running within your provate network.
 
 You may also provide a port (8080) and path (/). For example 'http://localhost:8080/'.
 
+### agent ###
+
+You can specify you own ```agent``` so that you are not limited by the in-built 5 request limit of Node's internal
+agent. You can also specify one to be used for a forward-proxy (see the next section).
+
+For example, if you would like to turn off the 5 concurrent requests limit, try this (see examples/agent.js for full
+program):
+
+```
+var https = require('https');
+
+var agent = new https.Agent();
+agent.maxSockets = 1000000;
+
+var verify = require('browserid-verify')({
+    type  : 'remote',
+    agent : agent,
+});
+```
+
+## Using a Forward Proxy to reach the remote Verifier ##
+
+If you have disabled outbound HTTP connections on your webservers you may want to run a local forward proxy on another
+machine in your VPN which does allow outbound HTTP connections.
+
+In that instance, we suggest using the npm project ```tunnel```. See examples/tunnel.js for more info.
+
 ## Remote v Local Verification ##
 
 Currently BrowserID is in Beta and therefore the assertion format is subject to change. Therefore we use the hosted

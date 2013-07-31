@@ -69,6 +69,10 @@ function browserIdVerify(opts) {
                 port     : parsedUrl.port,
             };
 
+            if ( opts.agent ) {
+                reqOpts.agent = opts.agent;
+            }
+
             var req = protocol.request(reqOpts, function(resp) {
                 // collect up the returned body
                 var body = "";
