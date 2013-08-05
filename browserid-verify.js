@@ -27,23 +27,24 @@ function browserIdVerify(opts) {
     opts.type = opts.type || 'remote';
     opts.url  = opts.url  || VERIFIER_URL;
 
-    // firstly, parse the url
-    var parsedUrl = url.parse(opts.url);
-
-    // var httpPkg = opts.
-    var protocol;
-    if ( parsedUrl.protocol === 'https:' ) {
-        protocol = https;
-    }
-    else if ( parsedUrl.protocol === 'http:' ) {
-        protocol = http;
-    }
-    else {
-        throw new Error("url protocol must be 'https:' or 'http:', not '" + parsedUrl.protocol + "'");
-    }
-
     // return the remote verifier
     if ( opts.type === 'remote' ) {
+
+        // firstly, parse the url
+        var parsedUrl = url.parse(opts.url);
+
+        // var httpPkg = opts.
+        var protocol;
+        if ( parsedUrl.protocol === 'https:' ) {
+            protocol = https;
+        }
+        else if ( parsedUrl.protocol === 'http:' ) {
+            protocol = http;
+        }
+        else {
+            throw new Error("url protocol must be 'https:' or 'http:', not '" + parsedUrl.protocol + "'");
+        }
+
         return function verifyRemotely(assertion, audience, callback) {
             if (typeof callback !== 'function') throw "missing required callback argument";
 
