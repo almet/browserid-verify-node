@@ -137,7 +137,6 @@ function browserIdVerify(opts) {
                         return callback(null, response.email, response);
                     })
                     .on('error', function(err) {
-                        console.log('In error = ' + err)
                         return callback(err);
                     })
                 ;
