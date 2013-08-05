@@ -101,9 +101,8 @@ function browserIdVerify(opts) {
                         }
 
                         // Here, we're passing back the entire reponse since it should be up to
-                        // the client to check if response.status === 'okay'. Also because
-                        // if we only return an email address, then they are missing out on other
-                        // info that they might want to use (such as expires, issuer, etc).
+                        // if they want to do anything with any of the other fields
+                        // (e.g. issuer, expires, etc).
                         return callback(null, response.email, response);
                     })
                 ;

@@ -11,7 +11,7 @@ var verify = require('../browserid-verify.js')({
 
 // ----------------------------------------------------------------------------
 
-// create the mock server and client for Route53
+// create the mock server and client for the Verifier
 var verifier = nock('https://verifier.login.persona.org');
 
 test('status is okay', function(t) {
