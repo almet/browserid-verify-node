@@ -96,6 +96,7 @@ function browserIdVerify(opts) {
                 hostname : parsedUrl.hostname,
                 path     : parsedUrl.path,
                 port     : parsedUrl.port,
+                rejectUnauthorized : true,
             };
 
             // set the agent on the request if needed
