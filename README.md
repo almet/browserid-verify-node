@@ -16,18 +16,14 @@ verify(assertion, audience, function(err, email, response) {
         return console.log('There was an error : ' + err);
     }
 
-    // The err above means that something went wrong. Now, check response
-    // to see if the assertion was ok.
-    if ( !email ) {
-        // make sure no session is created
-        return console.log('Assertion was not ok : ' + response.reason);
-    }
+    // If email is set, then the assertion was ok and response contains the full response.
+    // Set up your session and cookie as normal.
+
+    // If email is not set, then the request was fine but the assertion didn't check out.
+    // Do not set up the session and cookie. Instead provide a message to your users.
 
     console.log('The asserted email address is : ' + email);
     console.log('The entire reponse is :', response);
-
-    // At this point, set up your cookie and session for the
-    // newly logged in user.
 });
 ```
 
