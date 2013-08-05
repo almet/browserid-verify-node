@@ -103,7 +103,8 @@ function browserIdVerify(opts) {
                 reqOpts.agent = agent;
             }
 
-            var req = protocol.request(reqOpts, function(resp) {
+            // requestHandler
+            function requestHandler(resp) {
                 // if the statusCode isn't what we expect, get out of here
                 if ( resp.statusCode !== 200 ) {
                     return callback(new Error("Remote verifier returned a non-200 status code : " + resp.statusCode));
@@ -135,7 +136,16 @@ function browserIdVerify(opts) {
                         // (e.g. issuer, expires, etc).
                         return callback(null, response.email, response);
                     })
+                    .on('error', function(err) {
+                        console.log('In error = ' + err)
+                        return callback(err);
+                    })
                 ;
+            }
+
+            var req = protocol.request(reqOpts, requestHandler);
+            req.on('error', function(err) {
+                return callback(err);
             });
 
             req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
