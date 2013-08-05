@@ -28,7 +28,6 @@ var proxy = http.createServer(function (req, res) {
 
 proxy.on('connect', function(req, cltSocket, head) {
     // connect to an origin server
-    console.log('req.url=' + req.url);
     var srvUrl = url.parse('http://' + req.url);
     var srvSocket = net.connect(srvUrl.port, srvUrl.hostname, function() {
         var str = 'HTTP/1.1 200 Connection Established\r\n' +
