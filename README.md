@@ -1,5 +1,7 @@
 browserid-verify - Verify BrowserID assertions.
 
+[![Build Status](https://travis-ci.org/chilts/browserid-verify-node.png)](https://travis-ci.org/chilts/browserid-verify-node)
+
 ## Synopsis ##
 
 ```
