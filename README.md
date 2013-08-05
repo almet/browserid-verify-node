@@ -75,12 +75,18 @@ var verify = require('browserid-verify')({
 });
 ```
 
-## Using a Forward Proxy to reach the remote Verifier ##
+### proxy ###
 
-If you have disabled outbound HTTP connections on your webservers you may want to run a local forward proxy on another
-machine in your VPN which does allow outbound HTTP connections.
+A forward proxy can be used if you have firewalled off outgoing http connections from your webservers. If, for example,
+you have a host within your vpn that you can proxy requests through, then you can use that. e.g. using
+'http://proxy:8080'. Obviously your webservers must be able to make outgoing connections to this internal host.
 
-In that instance, we suggest using the npm project ```tunnel```. See examples/tunnel.js for more info.
+```
+var verify = require('browserid-verify')({
+    type  : 'remote',
+    proxy : 'http://proxy:8080',
+});
+```
 
 ## Remote v Local Verification ##
 
