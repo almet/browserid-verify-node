@@ -14,6 +14,9 @@ var http  = require('http');
 var querystring = require('querystring');
 var url = require('url');
 
+// npm
+var tunnel = require('tunnel');
+
 // ----------------------------------------------------------------------------
 
 const VERIFIER_METHOD = 'POST';
@@ -45,6 +48,31 @@ function browserIdVerify(opts) {
             throw new Error("url protocol must be 'https:' or 'http:', not '" + parsedUrl.protocol + "'");
         }
 
+        // create an agent if we are (1) tunneling, or (2) setting maxSockets
+        var agent;
+        if ( opts.proxy ) {
+            var parsedProxy = url.parse(opts.proxy);
+            if ( parsedProxy.protocol === 'https:' ) {
+                agent = tunnel.httpsOverHttps({
+                    proxy: {
+                        host : parsedProxy.hostname,
+                        port : parsedProxy.port,
+                    }
+                });
+            }
+            else if ( parsedProxy.protocol === 'http:' ) {
+                agent = tunnel.httpsOverHttp({
+                    proxy: {
+                        host : parsedProxy.hostname,
+                        port : parsedProxy.port,
+                    }
+                });
+            }
+            else {
+                throw new Error("proxy protocol must be 'https:' or 'http:', not '" + parsedUrl.protocol + "'");
+            }
+        }
+
         return function verifyRemotely(assertion, audience, callback) {
             if (typeof callback !== 'function') throw "missing required callback argument";
 
@@ -70,8 +98,9 @@ function browserIdVerify(opts) {
                 port     : parsedUrl.port,
             };
 
-            if ( opts.agent ) {
-                reqOpts.agent = opts.agent;
+            // set the agent on the request if needed
+            if ( agent ) {
+                reqOpts.agent = agent;
             }
 
             var req = protocol.request(reqOpts, function(resp) {

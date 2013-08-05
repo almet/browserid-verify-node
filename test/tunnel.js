@@ -8,21 +8,13 @@ var net = require('net');
 // npm
 var test = require('tape');
 var nock = require('nock');
-var tunnel = require('tunnel');
 
 // ----------------------------------------------------------------------------
-
-var tunnelingAgent = tunnel.httpsOverHttp({
-    proxy: {
-        host : 'localhost',
-        port : 3333,
-    }
-});
 
 // local
 var verify = require('../browserid-verify.js')({
     type  : 'remote',
-    agent : tunnelingAgent,
+    proxy : 'http://localhost:3333'
 });
 
 // ----------------------------------------------------------------------------
@@ -55,7 +47,7 @@ proxy.listen(3333, '127.0.0.1', function() {
     console.log('Listening on port 3333');
 
     // now perform the test
-    test('proxying through a local http forward proxy, at localhost:8888: status=failure (no certificates):', function(t) {
+    test('proxying through a local http forward proxy, at localhost:3333: status=failure (no certificates):', function(t) {
 
         // now verify a (fake) assertion
         verify('assertion', 'https://example.com/', function(err, email, response) {
