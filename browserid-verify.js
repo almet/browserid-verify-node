@@ -140,14 +140,13 @@ function browserIdVerify(opts) {
 
             req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-            var data = querystring.stringify({
+            var query = querystring.stringify({
                 assertion : assertion,
                 audience  : audience,
             });
 
-            req.setHeader('Content-Length', data.length);
-            req.write(data);
-            req.end();
+            req.setHeader('Content-Length', query.length);
+            req.end(query, 'utf8');
         };
     }
 
