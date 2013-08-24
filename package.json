@@ -16,10 +16,10 @@
 
     "repository" : {
         "type" : "git",
-        "url" : "git://github.com/chilts/browserid-verify.git"
+        "url" : "git://github.com/chilts/browserid-verify-node.git"
     },
     "bugs" : {
-        "url" : "http://github.com/chilts/browserid-verify/issues",
+        "url" : "http://github.com/chilts/browserid-verify-node/issues",
         "email" : "andychilton@gmail.com"
     },
 
