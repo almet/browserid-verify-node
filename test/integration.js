@@ -13,8 +13,6 @@ var verify = require('../browserid-verify.js')({
 test('status is failure - no certificates provided', function(t) {
     // now verify an invalid (fake) assertion
     verify('assertion', 'https://example.com/', function(err, email, response) {
-        console.log(err, email, response);
-
         t.equal(err, null, 'There is no error.');
 
         t.equal(email, undefined, 'No email address is returned.');
