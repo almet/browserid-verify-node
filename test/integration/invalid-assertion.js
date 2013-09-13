@@ -4,7 +4,7 @@
 var test = require('tape');
 
 // local
-var verify = require('../browserid-verify.js')({
+var verify = require('../../browserid-verify.js')({
     type : 'remote'
 });
 

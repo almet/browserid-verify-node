@@ -10,7 +10,7 @@ var verify = require('../../browserid-verify.js')({
 
 // ----------------------------------------------------------------------------
 
-test('status is failure - no certificates provided', function(t) {
+test('status is failure - no audience provided', function(t) {
     // verify with an invalid (empty) audience
     verify('assertion', '', function(err, email, response) {
         t.equal(err, null, 'There is no error.');
