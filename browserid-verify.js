@@ -107,8 +107,8 @@ function browserIdVerify(opts) {
             // requestHandler
             function requestHandler(resp) {
                 // if the statusCode isn't what we expect, get out of here
-                if ( resp.statusCode !== 200 ) {
-                    return callback(new Error("Remote verifier returned a non-200 status code : " + resp.statusCode));
+                if ( resp.statusCode !== 200 && resp.statusCode !== 400 ) {
+                    return callback(new Error("Remote verifier returned an unexpected status code : " + resp.statusCode));
                 }
 
                 // collect up the returned body

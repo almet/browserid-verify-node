@@ -24,7 +24,7 @@
     },
 
     "scripts" : {
-        "test" : "set -e; for FILE in test/*.js; do echo --- $FILE ---; node $FILE; echo; done"
+        "test" : "set -e; find test/ -name '*.js' -exec echo --- {} --- ';' -exec node {} ';'"
     },
 
     "keywords" : [
