@@ -98,12 +98,26 @@ However, once BrowserID is out of Beta and the assertion format is stable, we wi
 verification. Once this is done it achieves one of BrowserIDs goals which is that of distributed verification with no
 central service needed.
 
-Therefore, this library only implements remote verification.
+Therefore, this library currently only implements remote verification.
 
 However, the library will also perform local verification at some point in the future and will provide an easy upgrade
 path to make sure it is easy to switch from one to the other.
 
 Both remote and local verification functions will have the same API to allow this to happen.
+
+## Using this package in a Site, Framework or Framework Plugin ##
+
+It is not advised to perform remote or local verification yourself since things may change especially during the beta
+period (even though we'll give you plenty of time if things do change). It is much easier to depend on this package to
+make sure you're doing the right thing.
+
+Please depend on this package in your framework or framework plugin. This package will stay up to date with the latest
+best practices regarding both remote and (once implemented) local verification. There are some other packages which
+have helped in the past but these are old and out of date.
+
+In general, you should depend on "major.minor.x" in your package so that you will always get bug fixes. If we release
+a change in the API (a 'minor' release) or a breaking change (a 'major' release) we will endeavour to help you upgrade
+your package to this new version.
 
 ## License ##
 
