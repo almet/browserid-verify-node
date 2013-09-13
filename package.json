@@ -1,7 +1,7 @@
 {
     "name" : "browserid-verify",
     "description" : "Verify BrowserID assertions.",
-    "version" : "0.1.1",
+    "version" : "0.1.2",
     "license" : "MPL 2.0",
 
     "main" : "browserid-verify.js",
