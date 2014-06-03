@@ -20,7 +20,7 @@ var tunnel = require('tunnel');
 // ----------------------------------------------------------------------------
 
 const VERIFIER_METHOD = 'POST';
-const VERIFIER_URL    = 'https://verifier.login.persona.org/verify';
+const VERIFIER_URL    = 'https://verifier.accounts.firefox.com/v2';
 
 // ----------------------------------------------------------------------------
 
@@ -148,15 +148,20 @@ function browserIdVerify(opts) {
                 return callback(err);
             });
 
-            req.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+            req.setHeader('Content-Type', 'application/json');
 
             var query = querystring.stringify({
                 assertion : assertion,
                 audience  : audience,
             });
 
-            req.setHeader('Content-Length', query.length);
-            req.end(query, 'utf8');
+            var body = {
+              assertion : assertion,
+              audience  : audience
+            };
+
+            req.write(JSON.stringify(body));
+            req.end();
         };
     }
 
